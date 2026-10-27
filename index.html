@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IT Asset & License Tracker</title>
+<meta name="description" content="Dashboard tracking IT asset lifecycles, warranty expirations and software license renewals, with sample data regenerated daily.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-anthropic-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-anthropic-serif: "Source Serif 4", Georgia, serif;
+    --color-fg: #1f1e1c; --color-fg-muted: #6b6963; --color-bg: #f7f6f2; --color-panel: #ffffff;
+    --color-border-line: #e5e2da; --color-ok: #2f7d4f; --color-warn: #a8650a; --color-bad: #b3261e;
+    --cds-chart-grid: #eceae4; --cds-chart-axis: #c9c5bb; --cds-chart-muted: #cdc9bf; --cds-chart-status-critical: #c8432f;
+    --cds-surface-popover: #ffffff; --cds-border: #ddd9cf; --cds-shadow-popover: 0 6px 20px rgba(0,0,0,.08);
+    --cds-text-secondary: #6b6963; --cds-radius: 8px;
+    --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 16px; --cds-gap-lg: 24px; --cds-gap-xl: 36px;
+    --cds-pad-xs: 4px; --cds-pad-sm: 8px; --cds-pad-md: 12px; --cds-pad-lg: 20px; --cds-pad-xl: 28px;
+    --cds-font-size-caption: 12.5px; --cds-font-size-body: 14px; --cds-font-size-heading: 16px; --cds-font-size-title: 30px;
+    --cds-font-weight-medium: 500; --cds-dur-slow: 300ms; --cds-ease-out: cubic-bezier(.2,.8,.2,1);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-fg: #ece9e2; --color-fg-muted: #a19e96; --color-bg: #191917; --color-panel: #222220;
+      --color-border-line: #34332f; --color-ok: #6cc28f; --color-warn: #e0a54a; --color-bad: #f07a6e;
+      --cds-chart-grid: #2e2d2a; --cds-chart-axis: #4a4843; --cds-chart-muted: #55534d; --cds-chart-status-critical: #e5604c;
+      --cds-surface-popover: #2a2a27; --cds-border: #3d3c37; --cds-shadow-popover: 0 6px 20px rgba(0,0,0,.4);
+      --cds-text-secondary: #a19e96; color-scheme: dark;
+    }
+  }
+  html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-family: var(--font-anthropic-sans); }
+  .page { max-width: 1240px; margin-inline: auto; padding: 32px 20px 48px; }
+  @media (max-width: 600px) { .page { padding: 20px 16px 32px; } }
+  .dash-skeleton:empty, .dash-skeleton:not(:has(svg)) { position: relative; }
+  .am-tile-num.dash-skeleton { color: transparent; background: var(--cds-chart-grid); border-radius: 6px; width: 4ch; animation: am-pulse 1.4s ease-in-out infinite; }
+  .am-chart.dash-skeleton { background: var(--cds-chart-grid); border-radius: var(--cds-radius); animation: am-pulse 1.4s ease-in-out infinite; }
+  @keyframes am-pulse { 50% { opacity: .55; } }
+  @media (prefers-reduced-motion: reduce) { .dash-skeleton { animation: none !important; } }
+  .am-meta { margin-top: var(--cds-gap-sm) !important; font-size: var(--cds-font-size-caption) !important; }
+  .am-meta a { color: inherit; }
+  .am-feed { list-style: none; margin: 0; padding: 0; max-height: 26rem; overflow: auto; }
+  .am-feed > li { padding: var(--cds-pad-sm) 0; border-bottom: 1px solid var(--color-border-line); }
+  .am-feed > li:last-child { border-bottom: 0; }
+  .am-feed-date { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-bottom: 2px; font-variant-numeric: tabular-nums; }
+  .am-feed ul { margin: 0; padding-left: 1.1em; font-size: var(--cds-font-size-body); }
+  footer.am-foot { margin-top: var(--cds-gap-xl); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  footer.am-foot a { color: inherit; }
+</style>
+<script src="assets/vendor/d3.v7.min.js"></script>
+<script>window.DASH_SOURCES = { assets: 'data/assets.csv', licenses: 'data/licenses.csv', activity: 'data/activity.json' };</script>
+<script src="assets/dash-runtime.js"></script>
+</head>
+<body>
+<main class="page">
+<style>
+  .am { font-family: var(--font-anthropic-sans); color: var(--color-fg); display: flex; flex-direction: column; gap: var(--cds-gap-xl); }
+  .am-head h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0 0 var(--cds-gap-xs); }
+  .am-head p { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-body); max-width: 60rem; }
+  .am-head p b { color: var(--color-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .am-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr)); gap: var(--cds-gap-md); }
+  .am-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width: 0; container-type: inline-size; }
+  .am-tile-label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .am-tile-num { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; margin: var(--cds-gap-xs) 0; min-height: 1.3em; }
+  .am-tile-num.am-bad { color: var(--color-bad); }
+  .am-tile-num.am-warn { color: var(--color-warn); }
+  .am-tile-note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .am-section h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0 0 var(--cds-gap-md); }
+  .am-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--cds-gap-md); }
+  .am-card h3 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+  .am-note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: var(--cds-gap-xs) 0 var(--cds-gap-md); }
+  .am-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-bottom: var(--cds-gap-sm); }
+  .am-legend span { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
+  .am-sw { width: 0.625rem; height: 0.625rem; border-radius: 2px; display: inline-block; }
+  .am-sw-ok { background: var(--cds-chart-muted); }
+  .am-sw-soon { background: var(--color-warn); }
+  .am-sw-past { background: var(--cds-chart-status-critical); }
+  .am-chart { position: relative; min-height: 240px; }
+  .am-chart-life { min-height: 260px; }
+  .am-tip { position: absolute; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); pointer-events: none; white-space: nowrap; z-index: 2; font-variant-numeric: tabular-nums; }
+  .am-tip-h { color: var(--cds-text-secondary); margin-bottom: 2px; }
+  .am-tip-row { display: flex; align-items: center; gap: var(--cds-gap-xs); }
+  .am-fail { display: flex; align-items: center; justify-content: center; gap: var(--cds-gap-xs); min-height: inherit; height: 100%; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .am-fail i { width: 0.375rem; height: 0.375rem; border-radius: 50%; background: var(--color-bad); display: inline-block; }
+  .am-tools { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm); align-items: center; margin-bottom: var(--cds-gap-sm); }
+  .am-search { font: inherit; font-size: var(--cds-font-size-body); color: var(--color-fg); background: var(--color-bg); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-xs) var(--cds-pad-sm); min-width: 0; flex: 1 1 12rem; max-width: 20rem; }
+  .am-chip { font: inherit; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); background: transparent; border: 1px solid var(--color-border-line); border-radius: 999px; padding: var(--cds-pad-xs) var(--cds-pad-sm); cursor: pointer; }
+  .am-chip[aria-pressed="true"] { color: var(--color-fg); background: var(--color-bg); border-color: var(--color-fg-muted); }
+  .am-tablebox { max-height: 28rem; overflow: auto; }
+  .am-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-body); font-variant-numeric: tabular-nums; }
+  .am-table th { position: sticky; top: 0; background: var(--color-panel); text-align: left; font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); border-bottom: 1px solid var(--color-border-line); padding: var(--cds-pad-xs) var(--cds-pad-sm); z-index: 1; }
+  .am-table th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  .am-table th[aria-sort="ascending"] button::after { content: " ↑"; }
+  .am-table th[aria-sort="descending"] button::after { content: " ↓"; }
+  .am-table td { padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); vertical-align: middle; }
+  .am-table .am-num { text-align: right; }
+  .am-table td.am-neg { color: var(--color-bad); }
+  .am-sub { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .am-pill { display: inline-block; font-size: var(--cds-font-size-caption); padding: 1px var(--cds-pad-sm); border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+  .am-pill-bad { color: var(--color-bad); }
+  .am-pill-warn { color: var(--color-warn); }
+  .am-pill-ok { color: var(--color-ok); }
+  .am-pill-muted { color: var(--color-fg-muted); }
+  .am-bar { display: flex; align-items: center; gap: var(--cds-gap-xs); }
+  .am-bar-track { width: 4rem; height: 6px; background: var(--cds-chart-grid); border-radius: 3px; overflow: hidden; flex: none; }
+  .am-bar-fill { height: 100%; border-radius: 3px; }
+  @container (max-width: 640px) { .am-opt { display: none; } }
+  [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+  [data-dash-source-state=empty] { color: transparent; }
+</style>
+
+<div class="am">
+  <header class="am-head" id="overview">
+    <h1>IT asset &amp; license tracker</h1>
+    <p><b data-draw="t-renew" data-source="summary" data-field="renewals_90" data-row="0">—</b> licenses renew in the next 90 days, worth <b data-draw="t-cost" data-source="summary" data-field="renewal_cost_90" data-row="0">—</b> a year; <b data-draw="t-warr" data-source="summary" data-field="warranty_90" data-row="0">—</b> device warranties lapse in the same window and <b data-draw="t-past" data-source="summary" data-field="past_refresh" data-row="0">—</b> devices are already past their planned refresh date.</p>
+    <p class="am-meta">Sample data for a fictional company, regenerated every morning by a GitHub Action. Last update: <b data-draw="last-updated">—</b> · <a href="https://github.com/raulit-eng/it-license-lifecycle-dashboard">Source on GitHub</a></p>
+  </header>
+
+  <div class="am-tiles">
+    <div class="am-card">
+      <div class="am-tile-label">Assets tracked</div>
+      <div class="am-tile-num dash-skeleton" data-draw="k-assets" data-source="summary" data-field="assets_total" data-row="0">—</div>
+      <div class="am-tile-note">All devices in the inventory</div>
+    </div>
+    <div class="am-card">
+      <div class="am-tile-label">Past refresh date</div>
+      <div class="am-tile-num dash-skeleton" data-draw="k-past" data-source="summary" data-field="past_refresh" data-row="0">—</div>
+      <div class="am-tile-note">Older than their planned lifecycle</div>
+    </div>
+    <div class="am-card">
+      <div class="am-tile-label">Warranties ending</div>
+      <div class="am-tile-num dash-skeleton" data-draw="k-warr" data-source="summary" data-field="warranty_90" data-row="0">—</div>
+      <div class="am-tile-note">Next 90 days</div>
+    </div>
+    <div class="am-card">
+      <div class="am-tile-label">License renewals</div>
+      <div class="am-tile-num dash-skeleton" data-draw="k-renew" data-source="summary" data-field="renewals_90" data-row="0">—</div>
+      <div class="am-tile-note">Next 90 days, including overdue</div>
+    </div>
+    <div class="am-card">
+      <div class="am-tile-label">Renewal spend</div>
+      <div class="am-tile-num dash-skeleton" data-draw="k-cost" data-source="summary" data-field="renewal_cost_90" data-row="0">—</div>
+      <div class="am-tile-note">Annual cost of those renewals</div>
+    </div>
+    <div class="am-card">
+      <div class="am-tile-label">Seat use</div>
+      <div class="am-tile-num dash-skeleton" data-draw="k-seats" data-source="summary" data-field="seat_use" data-row="0">—</div>
+      <div class="am-tile-note">Assigned seats across all licenses</div>
+    </div>
+  </div>
+
+  <section class="am-section" id="calendar">
+    <h2>What's coming due</h2>
+    <div class="am-grid">
+      <div class="am-card">
+        <h3>Expirations by month</h3>
+        <p class="am-note">Device warranties ending and license renewals, this month and the next 11</p>
+        <div class="am-legend"><span><i class="am-sw" data-swatch="0"></i>License renewals</span><span><i class="am-sw" data-swatch="1"></i>Warranties ending</span></div>
+        <div class="am-chart dash-skeleton" data-draw="chart-months" data-source="by_month"></div>
+      </div>
+      <div class="am-card">
+        <h3>Renewal spend by month</h3>
+        <p class="am-note">Annual cost of licenses renewing each month, next 12 months</p>
+        <div class="am-legend"><span><i class="am-sw" data-swatch="0"></i>Renewal cost</span></div>
+        <div class="am-chart dash-skeleton" data-draw="chart-spend" data-source="by_month"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="am-section" id="licenses">
+    <h2>License renewals</h2>
+    <div class="am-card">
+      <p class="am-note" style="margin-top:0">Every license by renewal date. Days left counts from today; negative means the renewal date has passed. Seat use under 80% may mean seats to trim at renewal.</p>
+      <div class="am-tools">
+        <input class="am-search" type="search" data-search="renew" placeholder="Search product or vendor" aria-label="Search licenses">
+      </div>
+      <div class="am-tablebox">
+        <table class="am-table" data-table="renew" data-source="renewals" data-row-key="license_id">
+          <thead><tr>
+            <th data-field="product"><button type="button" data-sort="product">Product</button></th>
+            <th data-field="vendor" class="am-opt"><button type="button" data-sort="vendor">Vendor</button></th>
+            <th data-field="renewal_date"><button type="button" data-sort="renewal_date">Renews</button></th>
+            <th data-field="days_left" class="am-num" aria-sort="ascending"><button type="button" data-sort="days_left">Days left</button></th>
+            <th data-field="seat_use" class="am-opt"><button type="button" data-sort="seat_use">Seat use</button></th>
+            <th data-field="annual_cost" class="am-num"><button type="button" data-sort="annual_cost">Annual cost</button></th>
+            <th data-field="auto_renew" class="am-opt"><button type="button" data-sort="auto_renew">Auto-renew</button></th>
+            <th data-field="status"><button type="button" data-sort="status_rank">Status</button></th>
+          </tr></thead>
+          <tbody data-draw="renew-rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="am-section" id="assets">
+    <h2>Asset lifecycle</h2>
+    <div class="am-grid">
+      <div class="am-card">
+        <h3>Lifecycle stage by category</h3>
+        <p class="am-note">Devices in service, due for refresh within 180 days, and past their planned refresh date</p>
+        <div class="am-legend"><span><i class="am-sw am-sw-ok"></i>In service</span><span><i class="am-sw am-sw-soon"></i>Refresh within 180 days</span><span><i class="am-sw am-sw-past"></i>Past refresh</span></div>
+        <div class="am-chart am-chart-life dash-skeleton" data-draw="chart-life" data-source="lifecycle"></div>
+      </div>
+    </div>
+    <div class="am-card" style="margin-top: var(--cds-gap-md)">
+      <h3>Devices</h3>
+      <p class="am-note">Warranty and refresh dates for every device. A device needs attention when it is past refresh, out of warranty, its warranty ends within 90 days, or refresh is due within 180 days.</p>
+      <div class="am-tools">
+        <button type="button" class="am-chip" data-af="attention" aria-pressed="true">Needs attention</button>
+        <button type="button" class="am-chip" data-af="all" aria-pressed="false">All devices</button>
+        <input class="am-search" type="search" data-search="assets" placeholder="Search tag, device or department" aria-label="Search devices">
+      </div>
+      <div class="am-tablebox">
+        <table class="am-table" data-table="assets" data-source="asset_status" data-row-key="asset_tag">
+          <thead><tr>
+            <th data-field="asset_tag"><button type="button" data-sort="asset_tag">Tag</button></th>
+            <th data-field="name"><button type="button" data-sort="name">Device</button></th>
+            <th data-field="category" class="am-opt"><button type="button" data-sort="category">Category</button></th>
+            <th data-field="department" class="am-opt"><button type="button" data-sort="department">Department</button></th>
+            <th data-field="age_years" class="am-num am-opt"><button type="button" data-sort="age_years">Age (yrs)</button></th>
+            <th data-field="warranty_end"><button type="button" data-sort="warranty_end">Warranty ends</button></th>
+            <th data-field="lifecycle_end" class="am-opt"><button type="button" data-sort="lifecycle_end">Refresh due</button></th>
+            <th data-field="status" aria-sort="ascending"><button type="button" data-sort="status_rank">Status</button></th>
+          </tr></thead>
+          <tbody data-draw="asset-rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <section class="am-section" id="activity">
+    <h2>Recent activity</h2>
+    <div class="am-card">
+      <p class="am-note" style="margin-top:0">What the daily simulation changed: devices replaced at end of life, new equipment, spares retired and licenses renewed.</p>
+      <ol class="am-feed" data-draw="activity-feed"></ol>
+    </div>
+  </section>
+</div>
+
+<script>
+  /* ---------- Calculations ---------- */
+  dash.calc('renewals', {
+    inputs: ['licenses'],
+    title: 'Licenses with days left',
+    description: 'Each license with days until renewal counted from today, seat use (used ÷ total) and a renewal status.',
+    fn: (licenses) => {
+      const n = new Date(), today = Date.UTC(n.getFullYear(), n.getMonth(), n.getDate());
+      return licenses.map((l) => {
+        const days = Math.round((Date.parse(l.renewal_date + 'T00:00:00Z') - today) / 864e5);
+        const total = Number(l.seats_total), used = Number(l.seats_used);
+        const status = days < 0 ? 'Overdue' : days <= 30 ? 'Due within 30 days' : days <= 90 ? 'Due within 90 days' : 'Later';
+        return {
+          license_id: l.license_id, product: l.product, vendor: l.vendor, renewal_date: l.renewal_date,
+          days_left: days, seats_used: used, seats_total: total, seat_use: total ? used / total : null,
+          annual_cost: Number(l.annual_cost), auto_renew: l.auto_renew, status,
+          status_rank: ['Overdue', 'Due within 30 days', 'Due within 90 days', 'Later'].indexOf(status)
+        };
+      });
+    }
+  });
+
+  dash.calc('asset_status', {
+    inputs: ['assets'],
+    title: 'Devices with lifecycle status',
+    description: 'Each device with its age, days to warranty end and to planned refresh (from today), and a status.',
+    fn: (assets) => {
+      const n = new Date(), today = Date.UTC(n.getFullYear(), n.getMonth(), n.getDate());
+      const days = (s) => Math.round((Date.parse(s + 'T00:00:00Z') - today) / 864e5);
+      const order = ['Past refresh', 'Warranty expired', 'Warranty ending', 'Refresh soon', 'OK'];
+      return assets.map((a) => {
+        const w = days(a.warranty_end), r = days(a.lifecycle_end);
+        const status = r < 0 ? 'Past refresh' : w < 0 ? 'Warranty expired' : w <= 90 ? 'Warranty ending' : r <= 180 ? 'Refresh soon' : 'OK';
+        return {
+          asset_tag: a.asset_tag, name: a.name, category: a.category, department: a.department, location: a.location,
+          age_years: Math.round(-days(a.purchase_date) / 365.25 * 10) / 10,
+          warranty_end: a.warranty_end, warranty_days: w, lifecycle_end: a.lifecycle_end, refresh_days: r,
+          status, status_rank: order.indexOf(status)
+        };
+      });
+    }
+  });
+
+  dash.calc('summary', {
+    inputs: ['asset_status', 'renewals'],
+    title: 'Headline counts',
+    description: 'Counts for the tiles: devices, past refresh, warranties ending in 90 days, renewals due in 90 days (or overdue), their annual cost, and overall seat use.',
+    fn: (asset_status, renewals) => {
+      const due = renewals.filter((l) => l.days_left <= 90);
+      const used = renewals.reduce((s, l) => s + l.seats_used, 0), total = renewals.reduce((s, l) => s + l.seats_total, 0);
+      return [{
+        assets_total: asset_status.length,
+        past_refresh: asset_status.filter((a) => a.refresh_days < 0).length,
+        warranty_90: asset_status.filter((a) => a.warranty_days >= 0 && a.warranty_days <= 90).length,
+        renewals_90: due.length,
+        renewal_cost_90: due.reduce((s, l) => s + l.annual_cost, 0),
+        seat_use: total ? used / total : null
+      }];
+    }
+  });
+
+  dash.calc('by_month', {
+    inputs: ['asset_status', 'renewals'],
+    title: 'Expirations by month',
+    description: 'For this month and the next 11: warranties ending, licenses renewing, and the annual cost of those renewals.',
+    fn: (asset_status, renewals) => {
+      const n = new Date();
+      const months = Array.from({length: 12}, (_, i) => new Date(Date.UTC(n.getFullYear(), n.getMonth() + i, 1)).toISOString().slice(0, 7));
+      return months.map((m) => {
+        const r = renewals.filter((l) => l.renewal_date.slice(0, 7) === m);
+        return {
+          month: m,
+          warranties: asset_status.filter((a) => a.warranty_end.slice(0, 7) === m).length,
+          renewals: r.length,
+          renewal_cost: r.reduce((s, l) => s + l.annual_cost, 0)
+        };
+      });
+    }
+  });
+
+  dash.calc('lifecycle', {
+    inputs: ['asset_status'],
+    title: 'Lifecycle stage by category',
+    description: 'Devices per category: in service, refresh due within 180 days, and past planned refresh.',
+    fn: (asset_status) => {
+      const cats = [...new Set(asset_status.map((a) => a.category))];
+      return cats.map((c) => {
+        const g = asset_status.filter((a) => a.category === c);
+        return {
+          category: c,
+          in_service: g.filter((a) => a.refresh_days > 180).length,
+          refresh_soon: g.filter((a) => a.refresh_days >= 0 && a.refresh_days <= 180).length,
+          past_refresh: g.filter((a) => a.refresh_days < 0).length,
+          total: g.length
+        };
+      }).sort((a, b) => b.total - a.total);
+    }
+  });
+
+  /* ---------- Shared helpers ---------- */
+  window.am = {
+    money: (v) => v >= 10000 ? '$' + new Intl.NumberFormat('en', {notation: 'compact', maximumFractionDigits: 1}).format(v) : d3.format('$,.0f')(v),
+    moneyFull: d3.format('$,.0f'),
+    pct: d3.format('.0%'),
+    date: (s) => d3.utcFormat('%b %-d, %Y')(new Date(s + 'T00:00:00Z')),
+    month: (s) => d3.utcFormat('%b')(new Date(s + '-01T00:00:00Z')),
+    monthLong: (s) => d3.utcFormat('%B %Y')(new Date(s + '-01T00:00:00Z')),
+    fail: (el) => { const f = document.createElement('div'); f.className = 'am-fail'; f.append(document.createElement('i'), 'Failed to load'); el.replaceChildren(f); },
+    sort: {renew: {key: 'days_left', dir: 1}, assets: {key: 'status_rank', dir: 1}},
+    search: {renew: '', assets: ''},
+    assetFilter: 'attention',
+    tip(el) {
+      const t = document.createElement('div'); t.className = 'am-tip'; t.hidden = true; el.append(t);
+      return {
+        show(x, y, head, lines) {
+          const h = document.createElement('div'); h.className = 'am-tip-h'; h.textContent = head;
+          t.replaceChildren(h, ...lines.map(([color, label, val]) => {
+            const r = document.createElement('div'); r.className = 'am-tip-row';
+            if (color) { const s = document.createElement('i'); s.className = 'am-sw'; s.style.background = color; r.append(s); }
+            r.append(`${label}: ${val}`); return r;
+          }));
+          t.hidden = false;
+          const w = t.offsetWidth, W = el.clientWidth;
+          t.style.left = Math.max(0, Math.min(W - w, x - w / 2)) + 'px';
+          t.style.top = Math.max(0, y - t.offsetHeight - 8) + 'px';
+        },
+        hide() { t.hidden = true; }
+      };
+    }
+  };
+  document.querySelectorAll('[data-swatch]').forEach((s) => { s.style.background = dash.colors[Number(s.dataset.swatch)]; });
+</script>
+
+<script>
+  /* ---------- Numbers ---------- */
+  const fields = {
+    'k-assets': ['assets_total', d3.format(',')], 'k-past': ['past_refresh', d3.format(',')],
+    'k-warr': ['warranty_90', d3.format(',')], 'k-renew': ['renewals_90', d3.format(',')],
+    'k-cost': ['renewal_cost_90', am.money], 'k-seats': ['seat_use', am.pct],
+    't-renew': ['renewals_90', d3.format(',')], 't-cost': ['renewal_cost_90', am.money],
+    't-warr': ['warranty_90', d3.format(',')], 't-past': ['past_refresh', d3.format(',')]
+  };
+  Object.entries(fields).forEach(([name, [field, fmt]]) => {
+    dash.draw(name, (el) => {
+      const d = dash.data('summary');
+      el.classList.toggle('dash-skeleton', d.status === 'loading');
+      const row = d.status === 'ok' ? d.data[0] : null;
+      el.textContent = row && row[field] != null ? fmt(row[field]) : '—';
+      if (name === 'k-past') el.classList.toggle('am-bad', !!row && row.past_refresh > 0);
+      if (name === 'k-warr') el.classList.toggle('am-warn', !!row && row.warranty_90 > 0);
+    });
+  });
+</script>
+
+<script>
+  /* ---------- Expirations by month (grouped bars) ---------- */
+  dash.draw('chart-months', (el) => {
+    const d = dash.data('by_month');
+    el.classList.toggle('dash-skeleton', d.status === 'loading');
+    if (d.status === 'error') return am.fail(el);
+    el.replaceChildren();
+    if (d.status !== 'ok') return;
+    const rows = d.data, W = el.clientWidth || 560, H = 240;
+    const keys = [['renewals', 'License renewals', dash.colors[0]], ['warranties', 'Warranties ending', dash.colors[1]]];
+    const max = d3.max(rows, (r) => Math.max(r.renewals, r.warranties)) || 1;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).style('display', 'block');
+    const y = d3.scaleLinear([0, max], [0, 0]).nice();
+    const ticks = y.ticks(Math.min(max, 4)).filter(Number.isInteger);
+    const probe = svg.append('text').attr('font-size', 12).text(String(d3.max(ticks)));
+    const ml = probe.node().getComputedTextLength() + 10; probe.remove();
+    const m = {t: 8, r: 4, b: 24, l: ml};
+    y.range([H - m.b, m.t]);
+    const x = d3.scaleBand(rows.map((r) => r.month), [m.l, W - m.r]).paddingInner(0.25).paddingOuter(0.1);
+    const xi = d3.scaleBand(keys.map((k) => k[0]), [0, x.bandwidth()]).padding(0.08);
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', (t) => y(t)).attr('y2', (t) => y(t)).style('stroke', 'var(--cds-chart-grid)');
+    svg.append('g').selectAll('text').data(ticks).join('text').attr('x', m.l - 8).attr('y', (t) => y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 12).style('fill', 'var(--color-fg-muted)').text((t) => t);
+    const step = W < 420 ? 2 : 1;
+    svg.append('g').selectAll('text').data(rows.filter((_, i) => i % step === 0)).join('text').attr('x', (r) => x(r.month) + x.bandwidth() / 2).attr('y', H - 6).attr('text-anchor', 'middle').attr('font-size', 12).style('fill', 'var(--color-fg-muted)').text((r) => am.month(r.month));
+    svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', H - m.b).attr('y2', H - m.b).style('stroke', 'var(--cds-chart-axis)');
+    const g = svg.append('g').selectAll('g').data(rows).join('g').attr('transform', (r) => `translate(${x(r.month)},0)`);
+    g.selectAll('rect').data((r) => keys.map((k) => ({r, k}))).join('rect')
+      .attr('x', (o) => xi(o.k[0])).attr('width', Math.min(xi.bandwidth(), 32))
+      .attr('y', (o) => y(o.r[o.k[0]])).attr('height', (o) => Math.max(0, y(0) - y(o.r[o.k[0]])))
+      .attr('rx', 2).style('fill', (o) => o.k[2]);
+    const tip = am.tip(el);
+    g.append('rect').attr('x', 0).attr('y', m.t).attr('width', x.bandwidth()).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointerenter pointermove', function (ev, r) {
+        g.attr('opacity', (o) => (o === r ? 1 : 0.45));
+        tip.show(x(r.month) + x.bandwidth() / 2, y(Math.max(r.renewals, r.warranties)), am.monthLong(r.month), keys.map((k) => [k[2], k[1], r[k[0]]]));
+      })
+      .on('pointerleave', () => { g.attr('opacity', 1); tip.hide(); });
+  });
+
+  /* ---------- Renewal spend by month ---------- */
+  dash.draw('chart-spend', (el) => {
+    const d = dash.data('by_month');
+    el.classList.toggle('dash-skeleton', d.status === 'loading');
+    if (d.status === 'error') return am.fail(el);
+    el.replaceChildren();
+    if (d.status !== 'ok') return;
+    const rows = d.data, W = el.clientWidth || 560, H = 240;
+    const max = d3.max(rows, (r) => r.renewal_cost) || 1;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).style('display', 'block');
+    const y = d3.scaleLinear([0, max], [0, 0]).nice();
+    const ticks = y.ticks(4);
+    const fmt = (v) => '$' + new Intl.NumberFormat('en', {notation: 'compact', maximumFractionDigits: 1}).format(v);
+    const probe = svg.append('text').attr('font-size', 12).text(fmt(d3.max(ticks)));
+    const ml = probe.node().getComputedTextLength() + 10; probe.remove();
+    const m = {t: 8, r: 4, b: 24, l: ml};
+    y.range([H - m.b, m.t]);
+    const x = d3.scaleBand(rows.map((r) => r.month), [m.l, W - m.r]).padding(0.3);
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', (t) => y(t)).attr('y2', (t) => y(t)).style('stroke', 'var(--cds-chart-grid)');
+    svg.append('g').selectAll('text').data(ticks).join('text').attr('x', m.l - 8).attr('y', (t) => y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 12).style('fill', 'var(--color-fg-muted)').text(fmt);
+    const step = W < 420 ? 2 : 1;
+    svg.append('g').selectAll('text').data(rows.filter((_, i) => i % step === 0)).join('text').attr('x', (r) => x(r.month) + x.bandwidth() / 2).attr('y', H - 6).attr('text-anchor', 'middle').attr('font-size', 12).style('fill', 'var(--color-fg-muted)').text((r) => am.month(r.month));
+    svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', H - m.b).attr('y2', H - m.b).style('stroke', 'var(--cds-chart-axis)');
+    const bw = Math.min(x.bandwidth(), 32);
+    const bars = svg.append('g').selectAll('rect').data(rows).join('rect')
+      .attr('x', (r) => x(r.month) + (x.bandwidth() - bw) / 2).attr('width', bw)
+      .attr('y', (r) => y(r.renewal_cost)).attr('height', (r) => Math.max(0, y(0) - y(r.renewal_cost)))
+      .attr('rx', 2).style('fill', dash.colors[0]);
+    const tip = am.tip(el);
+    svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', (r) => x(r.month) - x.step() * x.paddingInner() / 2).attr('width', x.step()).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointerenter pointermove', (ev, r) => {
+        bars.attr('opacity', (o) => (o === r ? 1 : 0.45));
+        tip.show(x(r.month) + x.bandwidth() / 2, y(r.renewal_cost), am.monthLong(r.month), [[null, 'Renewal cost', am.moneyFull(r.renewal_cost)], [null, 'Licenses', r.renewals]]);
+      })
+      .on('pointerleave', () => { bars.attr('opacity', 1); tip.hide(); });
+  });
+
+  /* ---------- Lifecycle stacked bars ---------- */
+  dash.draw('chart-life', (el) => {
+    const d = dash.data('lifecycle');
+    el.classList.toggle('dash-skeleton', d.status === 'loading');
+    if (d.status === 'error') return am.fail(el);
+    el.replaceChildren();
+    if (d.status !== 'ok') return;
+    const rows = d.data, W = el.clientWidth || 560;
+    const keys = [['in_service', 'In service', 'var(--cds-chart-muted)'], ['refresh_soon', 'Refresh within 180 days', 'var(--color-warn)'], ['past_refresh', 'Past refresh', 'var(--cds-chart-status-critical)']];
+    const rowH = 30, H = rows.length * rowH + 28;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).style('display', 'block');
+    const probe = svg.append('g');
+    probe.selectAll('text').data(rows).join('text').attr('font-size', 12).text((r) => r.category);
+    const ml = d3.max(probe.selectAll('text').nodes(), (n) => n.getComputedTextLength()) + 12; probe.remove();
+    const max = d3.max(rows, (r) => r.total) || 1;
+    const endProbe = svg.append('text').attr('font-size', 12).text(String(max));
+    const mr = endProbe.node().getComputedTextLength() + 10; endProbe.remove();
+    const x = d3.scaleLinear([0, max], [ml, W - mr]);
+    const y = d3.scaleBand(rows.map((r) => r.category), [4, H - 24]).padding(0.3);
+    const ticks = x.ticks(Math.min(max, 5)).filter(Number.isInteger);
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', (t) => x(t)).attr('x2', (t) => x(t)).attr('y1', 4).attr('y2', H - 24).style('stroke', 'var(--cds-chart-grid)');
+    svg.append('g').selectAll('text').data(ticks).join('text').attr('x', (t) => x(t)).attr('y', H - 6).attr('text-anchor', 'middle').attr('font-size', 12).style('fill', 'var(--color-fg-muted)').text((t) => t);
+    svg.append('g').selectAll('text').data(rows).join('text').attr('x', ml - 10).attr('y', (r) => y(r.category) + y.bandwidth() / 2).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 12).style('fill', 'var(--color-fg)').text((r) => r.category);
+    const stack = d3.stack().keys(keys.map((k) => k[0]))(rows);
+    const groups = svg.append('g').selectAll('g').data(stack).join('g').style('fill', (s, i) => keys[i][2]);
+    groups.selectAll('rect').data((s) => s).join('rect').attr('x', (p) => x(p[0])).attr('width', (p) => Math.max(0, x(p[1]) - x(p[0]) - (p[1] > p[0] ? 1 : 0))).attr('y', (p) => y(p.data.category)).attr('height', Math.min(y.bandwidth(), 20)).attr('rx', 2);
+    svg.append('g').selectAll('text').data(rows).join('text').attr('x', (r) => x(r.total) + 6).attr('y', (r) => y(r.category) + Math.min(y.bandwidth(), 20) / 2).attr('dy', '0.32em').attr('font-size', 12).style('fill', 'var(--color-fg-muted)').text((r) => r.total);
+    const tip = am.tip(el);
+    svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', 0).attr('width', W).attr('y', (r) => y(r.category) - y.step() * y.paddingInner() / 2).attr('height', y.step()).style('fill', 'transparent')
+      .on('pointerenter pointermove', (ev, r) => {
+        tip.show(x(r.total / 2), y(r.category), `${r.category} · ${r.total} devices`, keys.map((k) => [k[2], k[1], r[k[0]]]));
+      })
+      .on('pointerleave', () => tip.hide());
+  });
+</script>
+
+<script>
+  /* ---------- Tables ---------- */
+  const cell = (text, cls) => { const td = document.createElement('td'); if (cls) td.className = cls; if (text instanceof Node) td.append(text); else td.textContent = text; return td; };
+  const pill = (text, tone) => { const s = document.createElement('span'); s.className = 'am-pill am-pill-' + tone; s.textContent = text; return s; };
+  const sorter = (st) => (a, b) => {
+    const va = a[st.key], vb = b[st.key];
+    if (va == null) return 1; if (vb == null) return -1;
+    return (typeof va === 'number' ? va - vb : String(va).localeCompare(String(vb))) * st.dir;
+  };
+  const failRow = (el, cols) => { const tr = document.createElement('tr'); const td = document.createElement('td'); td.colSpan = cols; const f = document.createElement('div'); f.className = 'am-fail'; f.append(document.createElement('i'), 'Failed to load'); td.append(f); tr.append(td); el.replaceChildren(tr); };
+
+  dash.draw('renew-rows', (el) => {
+    const d = dash.data('renewals');
+    if (d.status === 'error') return failRow(el, 8);
+    if (d.status !== 'ok') return el.replaceChildren();
+    const q = am.search.renew.trim().toLowerCase();
+    const tone = {'Overdue': 'bad', 'Due within 30 days': 'bad', 'Due within 90 days': 'warn', 'Later': 'muted'};
+    const rows = d.data.filter((r) => !q || (r.product + ' ' + r.vendor).toLowerCase().includes(q)).sort(sorter(am.sort.renew));
+    el.replaceChildren(...rows.map((r) => {
+      const tr = document.createElement('tr'); tr.dataset.key = r.license_id;
+      const bar = document.createElement('div'); bar.className = 'am-bar';
+      const track = document.createElement('div'); track.className = 'am-bar-track';
+      const fill = document.createElement('div'); fill.className = 'am-bar-fill';
+      fill.style.width = Math.min(100, (r.seat_use || 0) * 100) + '%';
+      fill.style.background = r.seat_use < 0.8 ? 'var(--color-warn)' : dash.colors[0];
+      track.append(fill); bar.append(track, r.seat_use == null ? '—' : am.pct(r.seat_use));
+      tr.append(
+        cell(r.product), cell(r.vendor, 'am-opt'), cell(am.date(r.renewal_date)),
+        cell(String(r.days_left), 'am-num' + (r.days_left < 0 ? ' am-neg' : '')),
+        cell(bar, 'am-opt'), cell(am.moneyFull(r.annual_cost), 'am-num'), cell(r.auto_renew, 'am-opt'),
+        cell(pill(r.status, tone[r.status]))
+      );
+      return tr;
+    }));
+  });
+
+  dash.draw('asset-rows', (el) => {
+    const d = dash.data('asset_status');
+    if (d.status === 'error') return failRow(el, 8);
+    if (d.status !== 'ok') return el.replaceChildren();
+    const q = am.search.assets.trim().toLowerCase();
+    const tone = {'Past refresh': 'bad', 'Warranty expired': 'bad', 'Warranty ending': 'warn', 'Refresh soon': 'warn', 'OK': 'ok'};
+    const rows = d.data
+      .filter((r) => am.assetFilter === 'all' || r.status !== 'OK')
+      .filter((r) => !q || [r.asset_tag, r.name, r.department, r.category].join(' ').toLowerCase().includes(q))
+      .sort((a, b) => sorter(am.sort.assets)(a, b) || a.refresh_days - b.refresh_days);
+    el.replaceChildren(...rows.map((r) => {
+      const tr = document.createElement('tr');
+      tr.append(
+        cell(r.asset_tag), cell(r.name), cell(r.category, 'am-opt'), cell(r.department, 'am-opt'),
+        cell(d3.format('.1f')(r.age_years), 'am-num am-opt'),
+        cell(am.date(r.warranty_end), r.warranty_days < 0 ? 'am-neg' : ''),
+        cell(am.date(r.lifecycle_end), 'am-opt' + (r.refresh_days < 0 ? ' am-neg' : '')),
+        cell(pill(r.status, tone[r.status]))
+      );
+      return tr;
+    }));
+  });
+
+  /* ---------- Controls ---------- */
+  document.querySelectorAll('[data-table]').forEach((table) => {
+    const which = table.dataset.table, body = which === 'renew' ? 'renew-rows' : 'asset-rows';
+    table.querySelectorAll('[data-sort]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const st = am.sort[which], key = btn.dataset.sort;
+        st.dir = st.key === key ? -st.dir : 1; st.key = key;
+        table.querySelectorAll('th').forEach((th) => th.removeAttribute('aria-sort'));
+        btn.closest('th').setAttribute('aria-sort', st.dir === 1 ? 'ascending' : 'descending');
+        dash.draw(body);
+      });
+    });
+  });
+  document.querySelectorAll('[data-search]').forEach((input) => {
+    input.addEventListener('input', () => {
+      const which = input.dataset.search; am.search[which] = input.value;
+      dash.draw(which === 'renew' ? 'renew-rows' : 'asset-rows');
+    });
+  });
+  document.querySelectorAll('[data-af]').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      am.assetFilter = chip.dataset.af;
+      document.querySelectorAll('[data-af]').forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      dash.draw('asset-rows');
+    });
+  });
+</script>
+
+<script>
+  /* ---------- Last update & activity feed ---------- */
+  dash.draw('last-updated', (el) => {
+    const d = dash.data('activity');
+    el.textContent = d.status === 'ok' && d.data.length ? d3.utcFormat('%B %-d, %Y')(new Date(d.data[0].date + 'T00:00:00Z')) : '—';
+  });
+  dash.draw('activity-feed', (el) => {
+    const d = dash.data('activity');
+    if (d.status === 'error') return am.fail(el);
+    if (d.status !== 'ok') return el.replaceChildren();
+    el.replaceChildren(...d.data.slice(0, 30).map((day) => {
+      const li = document.createElement('li');
+      const h = document.createElement('div'); h.className = 'am-feed-date';
+      h.textContent = d3.utcFormat('%a, %b %-d, %Y')(new Date(day.date + 'T00:00:00Z')) + ' · ' + day.devices + ' devices';
+      const ul = document.createElement('ul');
+      day.events.forEach((e) => { const i = document.createElement('li'); i.textContent = e; ul.append(i); });
+      li.append(h, ul);
+      return li;
+    }));
+  });
+</script>
+<footer class="am-foot">Built by Raul Astorga · HTML, D3.js and Python, hosted free on GitHub Pages · <a href="https://github.com/raulit-eng/it-license-lifecycle-dashboard">View the code</a></footer>
+</main>
+</body>
+</html>

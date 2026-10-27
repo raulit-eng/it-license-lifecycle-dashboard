@@ -1,0 +1,63 @@
+asset_tag,name,category,department,location,purchase_date,warranty_end,lifecycle_end,cost,status
+AST-1001,"MacBook Pro 14""",Laptop,Sales,HQ - Palmdale,2025-10-24,2028-10-24,2029-10-24,1999,In use
+AST-1002,Dell Latitude 5440,Laptop,IT,HQ - Palmdale,2024-08-10,2027-08-10,2028-08-10,1349,Spare
+AST-1003,Lenovo ThinkPad T14 Gen 4,Laptop,Finance,Branch - Lancaster,2026-06-13,2029-06-13,2030-06-13,1429,In use
+AST-1004,Lenovo ThinkPad T14 Gen 4,Laptop,IT,Branch - Lancaster,2026-02-24,2029-02-24,2030-02-24,1429,In use
+AST-1005,Dell Latitude 5440,Laptop,Engineering,HQ - Palmdale,2025-05-28,2028-05-28,2029-05-28,1349,In use
+AST-1006,HP EliteBook 840 G10,Laptop,HR,HQ - Palmdale,2026-05-19,2029-05-19,2030-05-19,1389,In use
+AST-1007,Lenovo ThinkPad T14 Gen 4,Laptop,Sales,HQ - Palmdale,2025-01-12,2028-01-12,2029-01-12,1429,In use
+AST-1008,"MacBook Pro 14""",Laptop,Engineering,HQ - Palmdale,2023-07-08,2026-07-08,2027-07-08,1999,In use
+AST-1009,Lenovo ThinkPad T14 Gen 4,Laptop,Finance,HQ - Palmdale,2024-07-27,2027-07-27,2028-07-27,1429,In use
+AST-1010,Lenovo ThinkPad T14 Gen 4,Laptop,Engineering,Branch - Lancaster,2023-11-16,2026-11-16,2027-11-16,1429,In use
+AST-1011,HP EliteBook 840 G10,Laptop,Sales,Branch - Lancaster,2023-05-17,2026-05-17,2027-05-17,1389,In use
+AST-1012,Lenovo ThinkPad T14 Gen 4,Laptop,HR,HQ - Palmdale,2022-09-27,2025-09-27,2026-09-27,1429,In use
+AST-1013,HP EliteBook 840 G10,Laptop,Engineering,Branch - Lancaster,2024-09-24,2027-09-24,2028-09-24,1389,In use
+AST-1014,Dell Latitude 5440,Laptop,IT,Branch - Lancaster,2025-12-30,2028-12-30,2029-12-30,1349,In use
+AST-1015,"MacBook Pro 14""",Laptop,Sales,Branch - Lancaster,2025-10-21,2028-10-21,2029-10-21,1999,In use
+AST-1016,Dell Latitude 5440,Laptop,IT,Branch - Lancaster,2022-05-16,2025-05-16,2026-05-16,1349,In use
+AST-1017,"MacBook Pro 14""",Laptop,Sales,Branch - Lancaster,2023-04-29,2026-04-29,2027-04-29,1999,In use
+AST-1018,Dell Latitude 5440,Laptop,Sales,HQ - Palmdale,2025-02-22,2028-02-22,2029-02-22,1349,In use
+AST-1019,"MacBook Pro 14""",Laptop,IT,Branch - Lancaster,2023-01-11,2026-01-11,2027-01-11,1999,In use
+AST-1020,HP EliteBook 840 G10,Laptop,Operations,HQ - Palmdale,2022-11-28,2025-11-28,2026-11-28,1389,Spare
+AST-1021,"MacBook Pro 14""",Laptop,IT,HQ - Palmdale,2025-09-18,2028-09-18,2029-09-18,1999,In use
+AST-1022,Lenovo ThinkPad T14 Gen 4,Laptop,Operations,HQ - Palmdale,2022-05-08,2025-05-08,2026-05-08,1429,In use
+AST-1023,HP EliteDesk 800 G9,Desktop,Sales,HQ - Palmdale,2024-06-19,2027-06-19,2029-06-19,1049,In use
+AST-1024,HP EliteDesk 800 G9,Desktop,Operations,HQ - Palmdale,2023-07-30,2026-07-30,2028-07-30,1049,In use
+AST-1025,HP EliteDesk 800 G9,Desktop,Sales,Branch - Lancaster,2022-09-12,2025-09-12,2027-09-12,1049,In use
+AST-1026,HP EliteDesk 800 G9,Desktop,HR,HQ - Palmdale,2021-04-15,2024-04-15,2026-04-15,1049,In use
+AST-1027,Dell OptiPlex 7010,Desktop,Engineering,HQ - Palmdale,2025-05-10,2028-05-10,2030-05-10,989,In use
+AST-1028,Dell OptiPlex 7010,Desktop,Operations,HQ - Palmdale,2025-03-08,2028-03-08,2030-03-08,989,In use
+AST-1029,HP EliteDesk 800 G9,Desktop,IT,Branch - Lancaster,2023-03-29,2026-03-29,2028-03-29,1049,Spare
+AST-1030,Dell OptiPlex 7010,Desktop,Engineering,Branch - Lancaster,2024-02-05,2027-02-05,2029-02-05,989,In use
+AST-1031,HP EliteDesk 800 G9,Desktop,Sales,Branch - Lancaster,2026-01-28,2029-01-28,2031-01-28,1049,In use
+AST-1032,Dell OptiPlex 7010,Desktop,HR,Branch - Lancaster,2021-02-19,2024-02-19,2026-02-19,989,In use
+AST-1033,HPE ProLiant DL380 Gen10,Server,IT,HQ - Palmdale,2023-04-16,2028-04-16,2028-04-16,9600,In use
+AST-1034,Dell PowerEdge R750,Server,IT,HQ - Palmdale,2023-08-26,2028-08-26,2028-08-26,11800,Spare
+AST-1035,Dell PowerEdge R750,Server,IT,HQ - Palmdale,2026-04-06,2031-04-06,2031-04-06,11800,In use
+AST-1036,Dell PowerEdge R750,Server,IT,Branch - Lancaster,2023-02-06,2028-02-06,2028-02-06,11800,Spare
+AST-1037,Ubiquiti U6 Pro access point,Network,IT,Branch - Lancaster,2022-07-29,2027-07-29,2028-07-29,179,In use
+AST-1038,FortiGate 100F firewall,Network,IT,Branch - Lancaster,2021-06-07,2026-06-07,2027-06-07,3900,In use
+AST-1039,Cisco Meraki MS225-48 switch,Network,IT,HQ - Palmdale,2025-01-15,2030-01-15,2031-01-15,4200,In use
+AST-1040,Ubiquiti U6 Pro access point,Network,IT,Branch - Lancaster,2023-09-09,2028-09-09,2029-09-09,179,In use
+AST-1041,Cisco Meraki MS225-48 switch,Network,IT,HQ - Palmdale,2020-11-13,2025-11-13,2026-11-13,4200,In use
+AST-1042,Ubiquiti U6 Pro access point,Network,IT,HQ - Palmdale,2022-08-08,2027-08-08,2028-08-08,179,In use
+AST-1043,Cisco Meraki MS225-48 switch,Network,IT,Branch - Lancaster,2020-09-25,2025-09-25,2026-09-25,4200,In repair
+AST-1044,"Dell P2723DE 27""",Monitor,IT,Branch - Lancaster,2023-09-24,2026-09-24,2029-09-24,379,Spare
+AST-1045,"LG 34"" UltraWide",Monitor,IT,Branch - Lancaster,2024-02-28,2027-02-28,2030-02-28,549,In use
+AST-1046,"Dell P2723DE 27""",Monitor,Sales,HQ - Palmdale,2023-12-22,2026-12-22,2029-12-22,379,In use
+AST-1047,"LG 34"" UltraWide",Monitor,Engineering,HQ - Palmdale,2022-09-02,2025-09-02,2028-09-02,549,In repair
+AST-1048,"LG 34"" UltraWide",Monitor,Operations,HQ - Palmdale,2021-05-12,2024-05-12,2027-05-12,549,In use
+AST-1049,"LG 34"" UltraWide",Monitor,Engineering,Branch - Lancaster,2021-08-23,2024-08-23,2027-08-23,549,Spare
+AST-1050,"LG 34"" UltraWide",Monitor,HR,HQ - Palmdale,2025-10-03,2028-10-03,2031-10-03,549,In use
+AST-1051,"Dell P2723DE 27""",Monitor,HR,Branch - Lancaster,2022-11-14,2025-11-14,2028-11-14,379,In use
+AST-1052,HP LaserJet Pro M404,Printer,Engineering,Branch - Lancaster,2023-12-21,2024-12-21,2028-12-21,329,In use
+AST-1053,HP LaserJet Pro M404,Printer,Engineering,HQ - Palmdale,2021-12-23,2022-12-23,2026-12-23,329,Spare
+AST-1054,HP LaserJet Pro M404,Printer,HR,Branch - Lancaster,2023-12-23,2024-12-23,2028-12-23,329,In use
+AST-1055,Brother MFC-L8900CDW,Printer,Engineering,Branch - Lancaster,2026-03-04,2027-03-04,2031-03-04,599,In use
+AST-1056,iPhone 15,Phone,HR,HQ - Palmdale,2025-10-07,2026-10-07,2028-10-07,799,In use
+AST-1057,Samsung Galaxy S23,Phone,IT,Branch - Lancaster,2025-11-02,2026-11-02,2028-11-02,749,In use
+AST-1058,Samsung Galaxy S23,Phone,IT,HQ - Palmdale,2025-10-13,2026-10-13,2028-10-13,749,In use
+AST-1059,iPhone 15,Phone,Engineering,HQ - Palmdale,2023-09-15,2024-09-15,2026-09-15,799,In use
+AST-1060,iPhone 15,Phone,Finance,Branch - Lancaster,2025-06-22,2026-06-22,2028-06-22,799,In use
+AST-1061,iPhone 15,Phone,Operations,Branch - Lancaster,2024-10-30,2025-10-30,2027-10-30,799,In use
+AST-1062,iPhone 15,Phone,Sales,Branch - Lancaster,2024-09-03,2025-09-03,2027-09-03,799,In use

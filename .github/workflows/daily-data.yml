@@ -1,0 +1,53 @@
+name: Daily data & deploy
+
+# Every morning (13:00 UTC = 6 AM Pacific in summer, 5 AM in winter) the
+# simulator moves the sample company forward one day, commits the new data,
+# and redeploys the dashboard to GitHub Pages. Any push to main also redeploys.
+on:
+  schedule:
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  update-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate today's data
+        if: github.event_name != 'push'
+        run: |
+          TODAY=$(TZ=America/Los_Angeles date +%F)
+          python3 scripts/evolve.py data/assets.csv data/licenses.csv /tmp/out "$TODAY" data/activity.json
+          cp "/tmp/out/assets-$TODAY.csv" data/assets.csv
+          cp "/tmp/out/licenses-$TODAY.csv" data/licenses.csv
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if ! git diff --cached --quiet; then
+            git commit -m "Daily data update $TODAY"
+            git push
+          fi
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
