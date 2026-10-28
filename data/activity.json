@@ -1,3 +1,17 @@
 [
- {"date": "2026-10-27", "devices": 62, "events": ["Initial sample inventory: 62 devices and 18 software licenses"]}
+ {
+  "date": "2026-10-28",
+  "devices": 62,
+  "events": [
+   "Replaced AST-1012 (Lenovo ThinkPad T14 Gen 4) with AST-1063",
+   "Replaced AST-1016 (Dell Latitude 5440) with AST-1064"
+  ]
+ },
+ {
+  "date": "2026-10-27",
+  "devices": 62,
+  "events": [
+   "Initial sample inventory: 62 devices and 18 software licenses"
+  ]
+ }
 ]
