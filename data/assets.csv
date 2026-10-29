@@ -41,17 +41,17 @@ AST-1039,Cisco Meraki MS225-48 switch,Network,IT,HQ - Palmdale,2025-01-15,2030-0
 AST-1040,Ubiquiti U6 Pro access point,Network,IT,Branch - Lancaster,2023-09-09,2028-09-09,2029-09-09,179,In use
 AST-1041,Cisco Meraki MS225-48 switch,Network,IT,HQ - Palmdale,2020-11-13,2025-11-13,2026-11-13,4200,In use
 AST-1042,Ubiquiti U6 Pro access point,Network,IT,HQ - Palmdale,2022-08-08,2027-08-08,2028-08-08,179,In use
-AST-1043,Cisco Meraki MS225-48 switch,Network,IT,Branch - Lancaster,2020-09-25,2025-09-25,2026-09-25,4200,In repair
+AST-1043,Cisco Meraki MS225-48 switch,Network,IT,Branch - Lancaster,2020-09-25,2025-09-25,2026-09-25,4200,In use
 AST-1044,"Dell P2723DE 27""",Monitor,IT,Branch - Lancaster,2023-09-24,2026-09-24,2029-09-24,379,Spare
 AST-1045,"LG 34"" UltraWide",Monitor,IT,Branch - Lancaster,2024-02-28,2027-02-28,2030-02-28,549,In use
 AST-1046,"Dell P2723DE 27""",Monitor,Sales,HQ - Palmdale,2023-12-22,2026-12-22,2029-12-22,379,In use
 AST-1047,"LG 34"" UltraWide",Monitor,Engineering,HQ - Palmdale,2022-09-02,2025-09-02,2028-09-02,549,In repair
 AST-1048,"LG 34"" UltraWide",Monitor,Operations,HQ - Palmdale,2021-05-12,2024-05-12,2027-05-12,549,In use
-AST-1049,"LG 34"" UltraWide",Monitor,Engineering,Branch - Lancaster,2021-08-23,2024-08-23,2027-08-23,549,Spare
+AST-1049,"LG 34"" UltraWide",Monitor,Engineering,Branch - Lancaster,2021-08-23,2024-08-23,2027-08-23,549,In use
 AST-1050,"LG 34"" UltraWide",Monitor,HR,HQ - Palmdale,2025-10-03,2028-10-03,2031-10-03,549,In use
 AST-1051,"Dell P2723DE 27""",Monitor,HR,Branch - Lancaster,2022-11-14,2025-11-14,2028-11-14,379,In use
 AST-1052,HP LaserJet Pro M404,Printer,Engineering,Branch - Lancaster,2023-12-21,2024-12-21,2028-12-21,329,In use
-AST-1053,HP LaserJet Pro M404,Printer,Engineering,HQ - Palmdale,2021-12-23,2022-12-23,2026-12-23,329,Spare
+AST-1053,HP LaserJet Pro M404,Printer,Engineering,HQ - Palmdale,2021-12-23,2022-12-23,2026-12-23,329,In use
 AST-1054,HP LaserJet Pro M404,Printer,HR,Branch - Lancaster,2023-12-23,2024-12-23,2028-12-23,329,In use
 AST-1055,Brother MFC-L8900CDW,Printer,Engineering,Branch - Lancaster,2026-03-04,2027-03-04,2031-03-04,599,In use
 AST-1056,iPhone 15,Phone,HR,HQ - Palmdale,2025-10-07,2026-10-07,2028-10-07,799,In use
