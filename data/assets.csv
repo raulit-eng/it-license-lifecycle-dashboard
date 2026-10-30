@@ -8,7 +8,7 @@ AST-1006,HP EliteBook 840 G10,Laptop,HR,HQ - Palmdale,2026-05-19,2029-05-19,2030
 AST-1007,Lenovo ThinkPad T14 Gen 4,Laptop,Sales,HQ - Palmdale,2025-01-12,2028-01-12,2029-01-12,1429,In use
 AST-1008,"MacBook Pro 14""",Laptop,Engineering,HQ - Palmdale,2023-07-08,2026-07-08,2027-07-08,1999,In use
 AST-1009,Lenovo ThinkPad T14 Gen 4,Laptop,Finance,HQ - Palmdale,2024-07-27,2027-07-27,2028-07-27,1429,In use
-AST-1010,Lenovo ThinkPad T14 Gen 4,Laptop,Engineering,Branch - Lancaster,2023-11-16,2026-11-16,2027-11-16,1429,In use
+AST-1010,Lenovo ThinkPad T14 Gen 4,Laptop,Engineering,Branch - Lancaster,2023-11-16,2026-11-16,2027-11-16,1429,In repair
 AST-1011,HP EliteBook 840 G10,Laptop,Sales,Branch - Lancaster,2023-05-17,2026-05-17,2027-05-17,1389,In use
 AST-1063,Lenovo ThinkPad T14 Gen 5,Laptop,HR,Branch - Lancaster,2026-10-28,2029-10-28,2030-10-28,1449,In use
 AST-1013,HP EliteBook 840 G10,Laptop,Engineering,Branch - Lancaster,2024-09-24,2027-09-24,2028-09-24,1389,In use
@@ -30,7 +30,7 @@ AST-1028,Dell OptiPlex 7010,Desktop,Operations,HQ - Palmdale,2025-03-08,2028-03-
 AST-1029,HP EliteDesk 800 G9,Desktop,IT,Branch - Lancaster,2023-03-29,2026-03-29,2028-03-29,1049,Spare
 AST-1030,Dell OptiPlex 7010,Desktop,Engineering,Branch - Lancaster,2024-02-05,2027-02-05,2029-02-05,989,In use
 AST-1031,HP EliteDesk 800 G9,Desktop,Sales,Branch - Lancaster,2026-01-28,2029-01-28,2031-01-28,1049,In use
-AST-1032,Dell OptiPlex 7010,Desktop,HR,Branch - Lancaster,2021-02-19,2024-02-19,2026-02-19,989,In use
+AST-1065,Dell OptiPlex 7020,Desktop,HR,HQ - Palmdale,2026-10-30,2029-10-30,2031-10-30,999,In use
 AST-1033,HPE ProLiant DL380 Gen10,Server,IT,HQ - Palmdale,2023-04-16,2028-04-16,2028-04-16,9600,In use
 AST-1034,Dell PowerEdge R750,Server,IT,HQ - Palmdale,2023-08-26,2028-08-26,2028-08-26,11800,Spare
 AST-1035,Dell PowerEdge R750,Server,IT,HQ - Palmdale,2026-04-06,2031-04-06,2031-04-06,11800,In use
