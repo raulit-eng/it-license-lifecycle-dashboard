@@ -20,11 +20,11 @@ AST-1018,Dell Latitude 5440,Laptop,Sales,HQ - Palmdale,2025-02-22,2028-02-22,202
 AST-1019,"MacBook Pro 14""",Laptop,IT,Branch - Lancaster,2023-01-11,2026-01-11,2027-01-11,1999,In use
 AST-1020,HP EliteBook 840 G10,Laptop,Operations,HQ - Palmdale,2022-11-28,2025-11-28,2026-11-28,1389,Spare
 AST-1021,"MacBook Pro 14""",Laptop,IT,HQ - Palmdale,2025-09-18,2028-09-18,2029-09-18,1999,In use
-AST-1022,Lenovo ThinkPad T14 Gen 4,Laptop,Operations,HQ - Palmdale,2022-05-08,2025-05-08,2026-05-08,1429,In use
+AST-1066,Dell Latitude 5440,Laptop,Operations,HQ - Palmdale,2026-10-31,2029-10-31,2030-10-31,1349,In use
 AST-1023,HP EliteDesk 800 G9,Desktop,Sales,HQ - Palmdale,2024-06-19,2027-06-19,2029-06-19,1049,In use
 AST-1024,HP EliteDesk 800 G9,Desktop,Operations,HQ - Palmdale,2023-07-30,2026-07-30,2028-07-30,1049,In use
 AST-1025,HP EliteDesk 800 G9,Desktop,Sales,Branch - Lancaster,2022-09-12,2025-09-12,2027-09-12,1049,In use
-AST-1026,HP EliteDesk 800 G9,Desktop,HR,HQ - Palmdale,2021-04-15,2024-04-15,2026-04-15,1049,In use
+AST-1067,HP EliteDesk 800 G9,Desktop,HR,Branch - Lancaster,2026-10-31,2029-10-31,2031-10-31,1049,In use
 AST-1027,Dell OptiPlex 7010,Desktop,Engineering,HQ - Palmdale,2025-05-10,2028-05-10,2030-05-10,989,In use
 AST-1028,Dell OptiPlex 7010,Desktop,Operations,HQ - Palmdale,2025-03-08,2028-03-08,2030-03-08,989,In use
 AST-1029,HP EliteDesk 800 G9,Desktop,IT,Branch - Lancaster,2023-03-29,2026-03-29,2028-03-29,1049,Spare
@@ -45,7 +45,7 @@ AST-1043,Cisco Meraki MS225-48 switch,Network,IT,Branch - Lancaster,2020-09-25,2
 AST-1044,"Dell P2723DE 27""",Monitor,IT,Branch - Lancaster,2023-09-24,2026-09-24,2029-09-24,379,Spare
 AST-1045,"LG 34"" UltraWide",Monitor,IT,Branch - Lancaster,2024-02-28,2027-02-28,2030-02-28,549,In use
 AST-1046,"Dell P2723DE 27""",Monitor,Sales,HQ - Palmdale,2023-12-22,2026-12-22,2029-12-22,379,In use
-AST-1047,"LG 34"" UltraWide",Monitor,Engineering,HQ - Palmdale,2022-09-02,2025-09-02,2028-09-02,549,In repair
+AST-1047,"LG 34"" UltraWide",Monitor,Engineering,HQ - Palmdale,2022-09-02,2025-09-02,2028-09-02,549,In use
 AST-1048,"LG 34"" UltraWide",Monitor,Operations,HQ - Palmdale,2021-05-12,2024-05-12,2027-05-12,549,In use
 AST-1049,"LG 34"" UltraWide",Monitor,Engineering,Branch - Lancaster,2021-08-23,2024-08-23,2027-08-23,549,In use
 AST-1050,"LG 34"" UltraWide",Monitor,HR,HQ - Palmdale,2025-10-03,2028-10-03,2031-10-03,549,In use

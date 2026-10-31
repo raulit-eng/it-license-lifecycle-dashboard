@@ -1,19 +1,19 @@
 license_id,product,vendor,license_type,seats_total,seats_used,renewal_date,annual_cost,auto_renew,owner_department
 LIC-001,Microsoft 365 Business Premium,Microsoft,Subscription,85,79,2026-11-18,26400,Yes,IT
-LIC-002,Adobe Acrobat Pro,Adobe,Subscription,25,20,2026-12-30,6000,Yes,Operations
-LIC-003,Zoom Workplace Business,Zoom,Subscription,40,32,2026-10-21,8400,No,IT
+LIC-002,Adobe Acrobat Pro,Adobe,Subscription,25,19,2026-12-30,6000,Yes,Operations
+LIC-003,Zoom Workplace Business,Zoom,Subscription,40,31,2026-10-21,8400,No,IT
 LIC-004,CrowdStrike Falcon Pro,CrowdStrike,Subscription,90,84,2026-12-07,9450,No,IT
 LIC-005,Okta Workforce Identity,Okta,Subscription,85,82,2027-02-22,5100,No,IT
 LIC-006,Jira Software Cloud,Atlassian,Subscription,30,26,2027-05-18,3780,Yes,Engineering
-LIC-007,Veeam Backup & Replication,Veeam,Subscription,10,10,2027-01-22,4600,No,IT
-LIC-008,VMware vSphere Standard,Broadcom,Subscription,8,7,2027-03-27,7200,No,IT
+LIC-007,Veeam Backup & Replication,Veeam,Subscription,10,9,2027-01-22,4600,No,IT
+LIC-008,VMware vSphere Standard,Broadcom,Subscription,8,8,2027-03-27,7200,No,IT
 LIC-009,Windows Server 2022 CALs,Microsoft,Perpetual + SA,100,95,2027-07-22,3900,No,IT
 LIC-010,AutoCAD LT,Autodesk,Subscription,6,4,2026-11-08,3060,Yes,Engineering
 LIC-011,Tableau Creator,Salesforce,Subscription,5,3,2027-09-22,4500,No,Finance
-LIC-012,DocuSign Business Pro,DocuSign,Subscription,12,11,2027-04-21,5400,Yes,Sales
+LIC-012,DocuSign Business Pro,DocuSign,Subscription,12,12,2027-04-21,5400,Yes,Sales
 LIC-013,Bitwarden Enterprise,Bitwarden,Subscription,85,71,2026-12-15,6120,Yes,IT
-LIC-014,FortiGuard UTP bundle,Fortinet,Support contract,2,2,2026-11-29,2850,No,IT
+LIC-014,FortiGuard UTP bundle,Fortinet,Support contract,2,1,2026-11-29,2850,No,IT
 LIC-015,Meraki Enterprise licenses,Cisco,Support contract,12,12,2027-06-24,3300,No,IT
 LIC-016,QuickBooks Online Advanced,Intuit,Subscription,8,7,2027-08-18,2400,Yes,Finance
 LIC-017,Slack Pro,Salesforce,Subscription,85,75,2027-03-17,8925,Yes,IT
-LIC-018,Dropbox Business,Dropbox,Subscription,20,12,2027-01-09,3600,Yes,Operations
+LIC-018,Dropbox Business,Dropbox,Subscription,20,13,2027-01-09,3600,Yes,Operations
