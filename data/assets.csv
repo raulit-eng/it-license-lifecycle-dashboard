@@ -8,7 +8,7 @@ AST-1006,HP EliteBook 840 G10,Laptop,HR,HQ - Palmdale,2026-05-19,2029-05-19,2030
 AST-1007,Lenovo ThinkPad T14 Gen 4,Laptop,Sales,HQ - Palmdale,2025-01-12,2028-01-12,2029-01-12,1429,In use
 AST-1008,"MacBook Pro 14""",Laptop,Engineering,HQ - Palmdale,2023-07-08,2026-07-08,2027-07-08,1999,In use
 AST-1009,Lenovo ThinkPad T14 Gen 4,Laptop,Finance,HQ - Palmdale,2024-07-27,2027-07-27,2028-07-27,1429,In use
-AST-1010,Lenovo ThinkPad T14 Gen 4,Laptop,Engineering,Branch - Lancaster,2023-11-16,2026-11-16,2027-11-16,1429,In repair
+AST-1010,Lenovo ThinkPad T14 Gen 4,Laptop,Engineering,Branch - Lancaster,2023-11-16,2026-11-16,2027-11-16,1429,In use
 AST-1011,HP EliteBook 840 G10,Laptop,Sales,Branch - Lancaster,2023-05-17,2026-05-17,2027-05-17,1389,In use
 AST-1063,Lenovo ThinkPad T14 Gen 5,Laptop,HR,Branch - Lancaster,2026-10-28,2029-10-28,2030-10-28,1449,In use
 AST-1013,HP EliteBook 840 G10,Laptop,Engineering,Branch - Lancaster,2024-09-24,2027-09-24,2028-09-24,1389,In use
@@ -18,7 +18,6 @@ AST-1064,"MacBook Pro 14""",Laptop,IT,HQ - Palmdale,2026-10-28,2029-10-28,2030-1
 AST-1017,"MacBook Pro 14""",Laptop,Sales,Branch - Lancaster,2023-04-29,2026-04-29,2027-04-29,1999,In use
 AST-1018,Dell Latitude 5440,Laptop,Sales,HQ - Palmdale,2025-02-22,2028-02-22,2029-02-22,1349,In use
 AST-1019,"MacBook Pro 14""",Laptop,IT,Branch - Lancaster,2023-01-11,2026-01-11,2027-01-11,1999,In use
-AST-1020,HP EliteBook 840 G10,Laptop,Operations,HQ - Palmdale,2022-11-28,2025-11-28,2026-11-28,1389,Spare
 AST-1021,"MacBook Pro 14""",Laptop,IT,HQ - Palmdale,2025-09-18,2028-09-18,2029-09-18,1999,In use
 AST-1066,Dell Latitude 5440,Laptop,Operations,HQ - Palmdale,2026-10-31,2029-10-31,2030-10-31,1349,In use
 AST-1023,HP EliteDesk 800 G9,Desktop,Sales,HQ - Palmdale,2024-06-19,2027-06-19,2029-06-19,1049,In use
